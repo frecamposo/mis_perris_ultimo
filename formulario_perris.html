@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Perris</title>
+    <link rel="stylesheet" href="css/fontello.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/jquery-3.6.4.min.js"></script>
+</head>
+<body onload="recuperar_dolar()">
+    <script>
+        $(document).ready(
+            function() {
+                $.get("https://mindicador.cl/api/dolar",function (data) {
+                    console.log('LA DATA:'+data);
+                    $.each(data.serie,function(i,item) {
+                        console.log(item.valor);
+                    })
+                })
+            }
+        );
+    </script>
+    <!-- cabecera de la pagina-->
+    <header>        
+        <input type="checkbox" name="" id="menu-bar">
+        <label class="icon-guidedog" for="menu-bar"></label>
+        <h1 class="icon-guidedog">Mis Perris</h1>
+        <nav class="menu">
+            <a href="">Inicio</a>
+            <a href="">Galeria</a>
+            <a href="">Formulario</a>
+            <a href="">Quienes Somos</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- banner -->
+        <section id="banner">
+            <img src="img/tengo-un-perro-sh.jpg" alt="">
+            <div class="contenedor">
+                <h1>Mascotas Felices en Mis Perris</h1>
+                <p>¿Cual es la mejor mascota para usted?</p>
+                <a href="">Leer Mas...</a>    
+            </div>
+        </section>
+        <!-- bienvenidos -->
+        <section id="bienvenido">
+            <h2>Inscribete y Adopta una Mascota</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos, quas eius consequatur maiores ratione, tenetur corrupti consequuntur odio vero commodi illo a aperiam. Sequi mollitia praesentium modi distinctio ullam maiores!</p>            
+        </section>
+        <!-- formulario ingreso adopcion-->
+        <script>
+            function recuperar_dolar() {
+                fetch("https://mindicador.cl/api/dolar").then(
+                    function (response) {
+                        if (response.status!=200) {
+                            //alert('no hay conexion');
+                            return false;
+                        }else{
+                            //alert('conexion ok');
+                        }
+                        response.json().then(
+                            function (data) {
+                                //console.log(data);
+                                //console.log('Dolar:'+data.serie[0].valor);
+                                let dolar=data.serie[0].valor;
+                                document.getElementById('mensaje').innerHTML=dolar;
+                            }
+                        )
+                    }
+                )
+            }
+        </script>
+        <div id="mensaje" style="text-align: center;">
+        </div>
+        <section id="formulario">            
+            <form action="" method="post" onsubmit="return validar()">
+                <h1>Ingrese Sus Datos de adopcion</h1>
+                <div class="contenedor-input">
+                    <input type="text" placeholder="ingrese nombre" class="col-p" name="txtNombre" id="txtNombre">
+                    <input type="text" placeholder="ingrese apellido" class="col-p" name="txtApellido" id="txtApellido">
+                    <input type="text" placeholder="ingrese direccion" class="col-g" name="txtDireccion" id="txtDireccion">
+                    <input type="text" placeholder="ingrese fono" class="col-p" name="txtFono" id="txtFono">
+                    <input type="date" class="col-p" name="datFechaNaci" id="datFechaNaci">
+                    <input type="text" placeholder="ingrese nombre usuario" class="col-g" name="txtNombreUser" id="txtNombreUser">
+                    <input type="text" placeholder="ingrese rut" class="col-g" name="txtRut" id="txtRut">
+                    <input type="password" placeholder="ingrese pass" class="col-p" name="pwdPass1" id="pwdPass1">
+                    <input type="password" placeholder="repita pass" class="col-p" name="pwdPass2" id="pwdPass2">
+
+                    <input type="submit" class="col-p" value="Enviar">
+                    <input type="reset" class="col-p" value="Limpiar">
+                    <input type="button" value="Grabar" onclick="grabar()">
+                    <input type="button" value="Leer" onclick="leer()">
+                </div>
+            </form>
+        </section>
+        <script src="js/persona.js"></script>
+        <script>
+            function grabar() {
+                perso=new Persona();
+                let nombre=document.getElementById("txtNombre").value;
+                let run=document.getElementById("txtRut").value;
+                perso.setNombre(nombre);
+                perso.setRun(run);
+                localStorage.setItem("datos",JSON.stringify(perso));
+
+            }
+            function leer() {
+                let dato=JSON.parse(localStorage.getItem("datos"));
+                console.log(dato);
+                localStorage.removeItem("datos");
+            }
+        </script>
+    </main>
+    <footer>
+        <p>Mis Perris</p>
+    </footer>
+    <script src="js/validaciones.js"></script>
+</body>
+</html>
